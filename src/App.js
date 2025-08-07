@@ -1,4 +1,4 @@
-// src/App.js (FINAL, COMPLETE, AND CORRECTED)
+// src/App.js (FINAL - Connected to Live Render Backend)
 import React, { useState, useEffect, useCallback, useMemo } from "react";
 import {
   Wallet, Mnemonic, isAddress, parseEther, formatEther, JsonRpcProvider, Contract,
@@ -13,7 +13,8 @@ import "./App.css";
 const RPC_URL = "https://data-seed-prebsc-1-s1.binance.org:8545";
 const USDT_CONTRACT_ADDRESS = "0x787A697324dbA4AB965C58CD33c13ff5eeA6295F";
 const USDC_CONTRACT_ADDRESS = "0x342e3aA1248AB77E319e3331C6fD3f1F2d4B36B1";
-const API_URL = "http://localhost:5001";
+// --- THIS IS THE ONLY CHANGE ---
+const API_URL = "https://crypto-wallet-backend-d2re.onrender.com";
 
 const ERC20_ABI = [
   "function balanceOf(address owner) view returns (uint256)", "function transfer(address to, uint256 amount) returns (bool)",
@@ -34,7 +35,6 @@ const QrModal = ({ address, onClose }) => (
     <div className="modal-content" onClick={(e) => e.stopPropagation()}>
       <h4>Your Wallet Address</h4>
       <p style={{marginBottom: '1rem'}}>Share this QR code to receive funds.</p>
-      {/* QR Code styling is now self-contained */}
       <div style={{ background: 'white', padding: '1rem', display: 'inline-block', borderRadius: '8px' }}>
         <QRCode value={address} size={256} />
       </div>
@@ -65,7 +65,6 @@ const LoadingSpinner = () => <div className="spinner"></div>;
 
 // --- MAIN APP COMPONENT ---
 export default function App() {
-  // State variables
   const [mode, setMode] = useState("access");
   const [walletName, setWalletName] = useState("");
   const [password, setPassword] = useState("");
@@ -105,7 +104,6 @@ export default function App() {
     return combined;
   }, [pendingTxs, history]);
 
-  // Wrapped in useCallback to prevent infinite loops
   const fetchAllBalances = useCallback(async (address) => {
     try {
       const bnbBal = await provider.getBalance(address);
@@ -117,7 +115,6 @@ export default function App() {
     } catch (e) { toast.error("Could not fetch token balances."); }
   }, [provider]);
 
-  // Wrapped in useCallback to prevent infinite loops
   const fetchHistory = useCallback(async (address) => {
     if (!address) return;
     setHistoryLoading(true);
@@ -130,7 +127,6 @@ export default function App() {
     finally { setHistoryLoading(false); }
   }, []);
 
-  // Wrapped in useCallback to prevent infinite loops
   const fetchContacts = useCallback(async (address) => {
     if (!address) return;
     try {
